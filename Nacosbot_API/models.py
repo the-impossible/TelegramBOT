@@ -34,20 +34,6 @@ class Location(models.Model):
         db_table = 'Location'
         verbose_name_plural = 'Locations'
 
-class Course(models.Model):
-    title = models.CharField(max_length=500)
-    code = models.CharField(max_length=500)
-    unit = models.IntegerField(default=2)
-    level = models.ForeignKey(Level, on_delete=models.CASCADE)
-    desc = models.CharField(max_length=1000)
-
-    def __str__(self):
-        return f'{self.location}'
-
-    class Meta:
-        db_table = 'Course'
-        verbose_name_plural = 'Courses'
-
 class Title(models.Model):
     title = models.CharField(max_length=10)
 
@@ -56,6 +42,21 @@ class Title(models.Model):
     class Meta:
         db_table = 'Lecturer Title'
         verbose_name_plural = 'Lecturer Title'
+
+class Course(models.Model):
+    title = models.CharField(max_length=500)
+    code = models.CharField(max_length=500)
+    unit = models.IntegerField(default=2)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    desc = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return f'{self.title}'
+
+    class Meta:
+        db_table = 'Course'
+        verbose_name_plural = 'Courses'
+
 
 class Lecturer(models.Model):
     name = models.CharField(max_length=500)
@@ -96,7 +97,7 @@ class Material(models.Model):
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Material for: {self.level}|{self.semester}'
+        return f'Material for: {self.level} Level | {self.semester}'
 
     class Meta:
         db_table = 'Material'
