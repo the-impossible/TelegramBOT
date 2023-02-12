@@ -16,7 +16,7 @@ class Classes(models.Model):
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.title} | {self.level}'
+        return f'{self.title} | {self.level} Level'
 
     class Meta:
         db_table = 'Classes'
@@ -28,7 +28,7 @@ class Location(models.Model):
     image = models.ImageField(default='img/dept.png', null=True, blank=True, upload_to='uploads/')
 
     def __str__(self):
-        return f'{self.venue_title} | {self.prog_id}'
+        return f'{self.location}'
 
     class Meta:
         db_table = 'Location'
