@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 django = "*"
 pillow = "*"
+python-decouple = "*"
+python-telegram-bot = "==13.0"
 
 [dev-packages]
 

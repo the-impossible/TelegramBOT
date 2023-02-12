@@ -1,9 +1,14 @@
-from telegram.ext import Updater, CommandHandler
+import django, pprint
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'Nacosbot.settings'
+django.setup()
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 from telegram import Bot
-from telegram import KeyboardButton, ReplyKeyboardMarkup
+from telegram import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
+from decouple import config
+from Nacosbot_API.models import *
 
-TOKEN = "6053378479:AAEBYjyRwvbbGT7r_830MSuqLm-JK-NlYJY"
-
+TOKEN = config('TOKEN')
 updater = Updater(TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
@@ -36,12 +41,32 @@ def start(update, context):
 
 
 def location(update, context):
-    update.message.reply_text("Location PLENTY!")
+    classes = Classes.objects.all()
+    keyboard = [[InlineKeyboardButton(str(pro), callback_data=str(pro.pk))] for pro in classes]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text('please select the class you need location details for', reply_markup=reply_markup)
+
+def button(update, context):
+
+    chat_id = update.callback_query.message.chat.id
+    query_data = update.callback_query.data
+    try:
+        loc = Location.objects.get(province_id=query_data)
+        context.bot.send_photo(chat_id=chat_id, caption=str(f'{loc.province} is located at: \n{loc}\nRefer to the image of the building ⬆️ for easy identification'), photo= open(loc.image.path, 'rb'))
+    except Location.DoesNotExist:
+        update.callback_query.message.edit_text('Unable to get Location Details')
+
+        keyboard = [[InlineKeyboardButton(str(pro), callback_data=str(pro.pk))] for pro in Classes.objects.all()]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        update.callback_query.message.edit_text('Unable to get Location Details \nplease select another class you need location details for', reply_markup=reply_markup)
 
 # Register Commands
 dispatcher.add_handler(CommandHandler('help', help))
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('location', location))
+
+button_handler = CallbackQueryHandler(button)
+dispatcher.add_handler(button_handler)
 
 updater.start_polling()
 updater.idle()
