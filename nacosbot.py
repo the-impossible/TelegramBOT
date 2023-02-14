@@ -130,7 +130,3 @@ dispatcher.add_handler(button_handler)
 
 updater.start_polling()
 updater.idle()
-
-# button_row = [KeyboardButton(f'{pro} Level') for pro in Level.objects.all()]
-# print(button_row)
-# kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, keyboard=[button_row])
