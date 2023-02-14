@@ -43,11 +43,22 @@ class Title(models.Model):
         db_table = 'Lecturer Title'
         verbose_name_plural = 'Lecturer Title'
 
+class Semester(models.Model):
+    semester = models.CharField(max_length=500)
+
+    def __str__(self):
+        return f'{self.semester}'
+
+    class Meta:
+        db_table = 'Semester'
+        verbose_name_plural = 'Semesters'
+
 class Course(models.Model):
     title = models.CharField(max_length=500)
     code = models.CharField(max_length=500)
     unit = models.IntegerField(default=2)
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
     desc = models.CharField(max_length=1000)
 
     def __str__(self):
@@ -81,19 +92,10 @@ class CoursesToLecturer(models.Model):
         db_table = 'Courses Assigned to Lecturers'
         verbose_name_plural = 'Courses Assigned to Lecturers'
 
-class Semester(models.Model):
-    semester = models.CharField(max_length=500)
-
-    def __str__(self):
-        return f'{self.semester}'
-
-    class Meta:
-        db_table = 'Semester'
-        verbose_name_plural = 'Semesters'
-
 class Material(models.Model):
     file = models.FileField(upload_to='materials/')
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
 
     def __str__(self):

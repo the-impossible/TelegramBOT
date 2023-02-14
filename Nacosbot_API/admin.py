@@ -30,8 +30,8 @@ class ClassesAdmin(admin.ModelAdmin):
     fieldsets = ()
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title','level','code','unit','desc')
-    search_fields = ('title_title','level__level','code','unit','desc')
+    list_display = ('title','level','code','unit','semester','desc')
+    search_fields = ('title_title','level__level','code','unit','desc','semester')
     ordering = ('unit','title','code')
 
     filter_horizontal = ()
@@ -57,8 +57,8 @@ class CoursesToLecturerAdmin(admin.ModelAdmin):
     fieldsets = ()
 
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ('file','level','semester')
-    search_fields = ('level__level','semester__semester',)
+    list_display = ('file','level','course','semester')
+    search_fields = ('level__level','course__title','semester__semester',)
     ordering = ('level','semester',)
 
     filter_horizontal = ()
